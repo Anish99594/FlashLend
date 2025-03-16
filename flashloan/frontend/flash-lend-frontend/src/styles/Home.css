@@ -1,0 +1,247 @@
+/* Home.css - Specific styles for the Home component */
+
+/* Header enhancements */
+.app-header {
+    background: linear-gradient(to right, var(--card-background), var(--card-background), var(--background-color));
+  }
+  
+  .logo-container .logo {
+    position: relative;
+  }
+  
+  .logo-icon {
+    filter: drop-shadow(0 0 2px rgba(108, 99, 255, 0.3));
+    transition: transform 0.3s ease;
+  }
+  
+  .logo:hover .logo-icon {
+    transform: rotate(15deg);
+  }
+  
+  /* Dashboard enhancements */
+  .dashboard-content {
+    position: relative;
+  }
+  
+  .stats-container {
+    gap: 2rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .stat-card {
+    transition: all 0.3s ease;
+    border-left: 4px solid transparent;
+  }
+  
+  .stat-card:first-child {
+    border-left-color: var(--primary-color);
+  }
+  
+  .stat-card:last-child {
+    border-left-color: var(--secondary-color);
+  }
+  
+  .stat-item span:last-child {
+    background-color: rgba(108, 99, 255, 0.1);
+    padding: 0.2rem 0.5rem;
+    border-radius: var(--radius);
+    font-size: 0.9rem;
+  }
+  
+  /* Active loans table improvements */
+  .active-loans-section {
+    overflow: hidden;
+  }
+  
+  .loans-table {
+    margin-top: 0.5rem;
+  }
+  
+  .table-header {
+    background-color: rgba(108, 99, 255, 0.05);
+    border-radius: var(--radius) var(--radius) 0 0;
+    padding: 0.75rem 1rem;
+  }
+  
+  .table-row {
+    padding: 0.75rem 1rem;
+    transition: background-color 0.2s ease;
+  }
+  
+  .table-row:hover:not(.overdue) {
+    background-color: var(--hover-color);
+  }
+  
+  .loan-status {
+    min-width: 80px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .loan-status.active::before,
+  .loan-status.overdue::before {
+    content: '';
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-right: 6px;
+  }
+  
+  .loan-status.active::before {
+    background-color: var(--success-color);
+  }
+  
+  .loan-status.overdue::before {
+    background-color: var(--error-color);
+  }
+  
+  /* Tab navigation improvements */
+  .nav-tabs li {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .nav-tabs li::before {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: var(--primary-light);
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+  }
+  
+  .nav-tabs li:hover::before {
+    transform: translateX(0);
+  }
+  
+  .nav-tabs li.active::before {
+    display: none;
+  }
+  
+  .refresh-button {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .refresh-button::after {
+    content: '↻';
+    margin-left: 0.5rem;
+  }
+  
+  /* Connect wallet prompt improvements */
+  .connect-prompt {
+    background: radial-gradient(circle at center, rgba(108, 99, 255, 0.05) 0%, transparent 70%);
+  }
+  
+  .connect-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    max-width: 450px;
+  }
+  
+  .connect-card:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-lg);
+  }
+  
+  .connect-card h2 {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .connect-card h2::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 50%;
+    width: 50px;
+    height: 3px;
+    background-color: var(--primary-color);
+    transform: translateX(-50%);
+    border-radius: 3px;
+  }
+  
+  /* Action cards */
+  .action-cards {
+    margin-top: 1rem;
+  }
+  
+  .action-card {
+    display: flex;
+    flex-direction: column;
+    border-top: 4px solid var(--primary-color);
+  }
+  
+  .action-card.admin-card {
+    border-top-color: var(--warning-color);
+  }
+  
+  /* Footer enhancements */
+  .app-footer {
+    background: linear-gradient(to right, var(--card-background), var(--background-color), var(--card-background));
+    padding: 1rem 2rem;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .stat-item {
+      flex-direction: column;
+      gap: 0.25rem;
+      align-items: flex-start;
+      padding: 0.5rem 0;
+    }
+    
+    .stat-item span:last-child {
+      width: 100%;
+      text-align: right;
+    }
+    
+    .table-header, 
+    .table-row {
+      grid-template-columns: 1fr 1.3fr 0.7fr;
+      font-size: 0.9rem;
+    }
+    
+    .nav-tabs li {
+      flex: 1;
+      text-align: center;
+      white-space: nowrap;
+    }
+    
+    .loan-status {
+      min-width: auto;
+    }
+  }
+  
+  /* Dark mode adjustments */
+  @media (prefers-color-scheme: dark) {
+    .stat-item span:last-child {
+      background-color: rgba(108, 99, 255, 0.2);
+    }
+    
+    .table-header {
+      background-color: rgba(108, 99, 255, 0.1);
+    }
+    
+    .connect-prompt {
+      background: radial-gradient(circle at center, rgba(108, 99, 255, 0.1) 0%, transparent 70%);
+    }
+    
+    .stat-card, .action-card {
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    }
+  }
+  
+  /* Animation for tab transitions */
+  .tab-content {
+    animation: fadeIn 0.4s ease;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }

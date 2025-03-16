@@ -1,0 +1,170 @@
+{
+  "address": "7niFkVN9AF2vUnHemUyFAzikAfB2LYmKQvreTFiwKRQ8",
+  "metadata": {
+    "name": "flash_lend",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "Created with Anchor"
+  },
+  "instructions": [
+    {
+      "name": "clean_expired_loans",
+      "discriminator": [242, 251, 90, 66, 208, 234, 181, 176],
+      "accounts": [
+        {"name": "state", "writable": true, "pda": {"seeds": [{"kind": "const", "value": [115, 116, 97, 116, 101]}]}}
+      ],
+      "args": []
+    },
+    {
+      "name": "initialize_pool",
+      "discriminator": [95, 180, 10, 172, 84, 174, 232, 40],
+      "accounts": [
+        {"name": "state", "writable": true, "pda": {"seeds": [{"kind": "const", "value": [115, 116, 97, 116, 101]}]}},
+        {"name": "payer", "writable": true, "signer": true},
+        {"name": "system_program", "address": "11111111111111111111111111111111"}
+      ],
+      "args": []
+    },
+    {
+      "name": "repay_loan",
+      "discriminator": [224, 93, 144, 77, 61, 17, 137, 54],
+      "accounts": [
+        {"name": "state", "writable": true, "pda": {"seeds": [{"kind": "const", "value": [115, 116, 97, 116, 101]}]}},
+        {"name": "pool_vault", "writable": true},
+        {"name": "user_token_account", "writable": true},
+        {"name": "payer", "writable": true, "signer": true},
+        {"name": "token_program", "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"}
+      ],
+      "args": []
+    },
+    {
+      "name": "request_loan",
+      "discriminator": [120, 2, 7, 7, 1, 219, 235, 187],
+      "accounts": [
+        {"name": "state", "writable": true, "pda": {"seeds": [{"kind": "const", "value": [115, 116, 97, 116, 101]}]}},
+        {"name": "pool_vault", "writable": true},
+        {"name": "user_token_account", "writable": true},
+        {"name": "payer", "writable": true, "signer": true},
+        {"name": "token_program", "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"}
+      ],
+      "args": [
+        {"name": "amount", "type": "u64"},
+        {"name": "duration", "type": "u64"}
+      ]
+    },
+    {
+      "name": "reset_pool",
+      "discriminator": [108, 172, 93, 91, 146, 8, 155, 112],
+      "accounts": [
+        {"name": "state", "writable": true, "pda": {"seeds": [{"kind": "const", "value": [115, 116, 97, 116, 101]}]}},
+        {"name": "pool_vault", "writable": true},
+        {"name": "user_token_account", "writable": true},
+        {"name": "payer", "writable": true, "signer": true},
+        {"name": "token_program", "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"}
+      ],
+      "args": []
+    },
+    {
+      "name": "stake_to_pool",
+      "discriminator": [225, 60, 163, 190, 239, 96, 192, 85],
+      "accounts": [
+        {"name": "state", "writable": true, "pda": {"seeds": [{"kind": "const", "value": [115, 116, 97, 116, 101]}]}},
+        {"name": "pool_vault", "writable": true},
+        {"name": "user_token_account", "writable": true},
+        {"name": "payer", "writable": true, "signer": true},
+        {"name": "token_program", "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"}
+      ],
+      "args": [
+        {"name": "amount", "type": "u64"}
+      ]
+    },
+    {
+      "name": "withdraw_stake",
+      "discriminator": [153, 8, 22, 138, 105, 176, 87, 66],
+      "accounts": [
+        {"name": "state", "writable": true, "pda": {"seeds": [{"kind": "const", "value": [115, 116, 97, 116, 101]}]}},
+        {"name": "pool_vault", "writable": true},
+        {"name": "user_token_account", "writable": true},
+        {"name": "payer", "writable": true, "signer": true},
+        {"name": "token_program", "address": "TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA"}
+      ],
+      "args": [
+        {"name": "amount", "type": "u64"}
+      ]
+    }
+  ],
+  "accounts": [
+    {
+      "name": "FlashLendState",
+      "discriminator": [102, 62, 75, 127, 164, 121, 171, 222],
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {"name": "admin", "type": "pubkey"},
+          {"name": "pool", "type": {"defined": {"name": "Pool"}}},
+          {"name": "active_loans", "type": {"vec": {"option": {"defined": {"name": "Loan"}}}}},
+          {"name": "reputations", "type": {"vec": {"option": {"defined": {"name": "Reputation"}}}}}
+        ]
+      },
+      "size": 5322
+    }
+  ],
+  "errors": [
+    {"code": 6000, "name": "InvalidAmount", "msg": "Invalid amount provided"},
+    {"code": 6001, "name": "InvalidDuration", "msg": "Invalid duration provided"},
+    {"code": 6002, "name": "InsufficientFunds", "msg": "Insufficient funds in pool"},
+    {"code": 6003, "name": "NoActiveLoan", "msg": "No active loan found"},
+    {"code": 6004, "name": "LoanExpired", "msg": "Loan has expired"},
+    {"code": 6005, "name": "Overflow", "msg": "Arithmetic overflow occurred"},
+    {"code": 6006, "name": "Unauthorized", "msg": "Unauthorized access"}
+  ],
+  "types": [
+    {
+      "name": "FlashLendState",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {"name": "admin", "type": "pubkey"},
+          {"name": "pool", "type": {"defined": {"name": "Pool"}}},
+          {"name": "active_loans", "type": {"vec": {"option": {"defined": {"name": "Loan"}}}}},
+          {"name": "reputations", "type": {"vec": {"option": {"defined": {"name": "Reputation"}}}}}
+        ]
+      }
+    },
+    {
+      "name": "Loan",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {"name": "borrower", "type": "pubkey"},
+          {"name": "amount", "type": "u64"},
+          {"name": "fee", "type": "u64"},
+          {"name": "duration", "type": "u64"},
+          {"name": "start_time", "type": "u64"},
+          {"name": "repaid", "type": "bool"}
+        ]
+      }
+    },
+    {
+      "name": "Pool",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {"name": "total_staked", "type": "u64"},
+          {"name": "available", "type": "u64"},
+          {"name": "accumulated_fees", "type": "u64"}
+        ]
+      }
+    },
+    {
+      "name": "Reputation",
+      "type": {
+        "kind": "struct",
+        "fields": [
+          {"name": "user", "type": "pubkey"},
+          {"name": "successful_repayments", "type": "u64"}
+        ]
+      }
+    }
+  ]
+}
