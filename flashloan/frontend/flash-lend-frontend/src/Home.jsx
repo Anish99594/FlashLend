@@ -9,7 +9,7 @@ import RequestLoan from './components/RequestLoan';
 import RepayLoan from './components/RepayLoan';
 import ResetPool from './components/ResetPool';
 import { fetchStateData } from './utils/fetchStateData';
-import logo from "../public/flashlendlogo1.png";
+//import logo from "../public/flashlendlogo1.png";
 import './styles/Home.css';
 
 const Home = ({ programId, mintAddress }) => {
@@ -34,7 +34,6 @@ const Home = ({ programId, mintAddress }) => {
           ...data,
           activeLoans: data.activeLoans.filter(loan => !loan.repaid),
         });
-
         const userTokenAccount = getAssociatedTokenAddressSync(mintPubkey, publicKey);
         try {
           const tokenAccountInfo = await getAccount(connection, userTokenAccount);
@@ -43,7 +42,6 @@ const Home = ({ programId, mintAddress }) => {
           console.log('Token account not found or other error:', e);
           setTokenBalance(0);
         }
-
         const sol = await connection.getBalance(publicKey);
         setSolBalance(sol);
       } catch (err) {
@@ -56,10 +54,8 @@ const Home = ({ programId, mintAddress }) => {
 
   useEffect(() => {
     refreshData();
-    
     // Set up interval to refresh data every 30 seconds
     const interval = setInterval(refreshData, 30000);
-    
     // Clean up interval on component unmount
     return () => clearInterval(interval);
   }, [publicKey, connection]);
@@ -85,7 +81,6 @@ const Home = ({ programId, mintAddress }) => {
                   <span>{stateData ? (stateData.pool.accumulatedFees / 1_000_000).toFixed(6) : '0'} Tokens</span>
                 </div>
               </div>
-              
               <div className="stat-card">
                 <h3>Your Stats</h3>
                 <div className="stat-item">
@@ -106,7 +101,6 @@ const Home = ({ programId, mintAddress }) => {
                 </div>
               </div>
             </div>
-            
             {stateData?.activeLoans.length > 0 && (
               <div className="active-loans-section">
                 <h3>Your Active Loans</h3>
@@ -117,10 +111,10 @@ const Home = ({ programId, mintAddress }) => {
                     <div>Status</div>
                   </div>
                   {stateData.activeLoans.map((loan, index) => {
-                    const now = new Date().getTime() / 1000;
-                    const dueDate = new Date((loan.timestamp.toNumber() + loan.duration.toNumber()) * 1000);
-                    const isOverdue = now > (loan.timestamp.toNumber() + loan.duration.toNumber());
-                    
+                    const now = Math.floor(Date.now() / 1000); // Current time in seconds
+                    const dueDate = new Date((loan.startTime + loan.duration) * 1000); // Convert to milliseconds
+                    const isOverdue = now > (loan.startTime + loan.duration);
+
                     return (
                       <div key={index} className={`table-row ${isOverdue ? 'overdue' : ''}`}>
                         <div>{(loan.amount / 1_000_000).toFixed(2)} Tokens</div>
@@ -141,19 +135,19 @@ const Home = ({ programId, mintAddress }) => {
           <div className="tab-content">
             <div className="action-cards">
               <div className="action-card">
-                <Stake 
-                  mintAddress={mintAddress} 
-                  statePDA={statePDA} 
-                  poolVault={poolVault} 
-                  onSuccess={refreshData} 
+                <Stake
+                  mintAddress={mintAddress}
+                  statePDA={statePDA}
+                  poolVault={poolVault}
+                  onSuccess={refreshData}
                 />
               </div>
               <div className="action-card">
-                <WithdrawStake 
-                  mintAddress={mintAddress} 
-                  statePDA={statePDA} 
-                  poolVault={poolVault} 
-                  onSuccess={refreshData} 
+                <WithdrawStake
+                  mintAddress={mintAddress}
+                  statePDA={statePDA}
+                  poolVault={poolVault}
+                  onSuccess={refreshData}
                 />
               </div>
             </div>
@@ -164,19 +158,19 @@ const Home = ({ programId, mintAddress }) => {
           <div className="tab-content">
             <div className="action-cards">
               <div className="action-card">
-                <RequestLoan 
-                  mintAddress={mintAddress} 
-                  statePDA={statePDA} 
-                  poolVault={poolVault} 
-                  onSuccess={refreshData} 
+                <RequestLoan
+                  mintAddress={mintAddress}
+                  statePDA={statePDA}
+                  poolVault={poolVault}
+                  onSuccess={refreshData}
                 />
               </div>
               <div className="action-card">
-                <RepayLoan 
-                  mintAddress={mintAddress} 
-                  statePDA={statePDA} 
-                  poolVault={poolVault} 
-                  onSuccess={refreshData} 
+                <RepayLoan
+                  mintAddress={mintAddress}
+                  statePDA={statePDA}
+                  poolVault={poolVault}
+                  onSuccess={refreshData}
                 />
               </div>
             </div>
@@ -187,11 +181,11 @@ const Home = ({ programId, mintAddress }) => {
           <div className="tab-content">
             <div className="action-cards">
               <div className="action-card admin-card">
-                <ResetPool 
-                  mintAddress={mintAddress} 
-                  statePDA={statePDA} 
-                  poolVault={poolVault} 
-                  onSuccess={refreshData} 
+                <ResetPool
+                  mintAddress={mintAddress}
+                  statePDA={statePDA}
+                  poolVault={poolVault}
+                  onSuccess={refreshData}
                 />
               </div>
             </div>
@@ -221,7 +215,6 @@ const Home = ({ programId, mintAddress }) => {
           )} */}
         </div>
       </header>
-
       <main className="main-content">
         {!publicKey ? (
           <div className="connect-prompt">
@@ -235,25 +228,25 @@ const Home = ({ programId, mintAddress }) => {
           <>
             <nav className="app-nav">
               <ul className="nav-tabs">
-                <li 
+                <li
                   className={activeTab === 'dashboard' ? 'active' : ''}
                   onClick={() => setActiveTab('dashboard')}
                 >
                   Dashboard
                 </li>
-                <li 
+                <li
                   className={activeTab === 'stake' ? 'active' : ''}
                   onClick={() => setActiveTab('stake')}
                 >
                   Stake
                 </li>
-                <li 
+                <li
                   className={activeTab === 'borrow' ? 'active' : ''}
                   onClick={() => setActiveTab('borrow')}
                 >
                   Borrow
                 </li>
-                <li 
+                <li
                   className={activeTab === 'admin' ? 'active' : ''}
                   onClick={() => setActiveTab('admin')}
                 >
@@ -264,12 +257,10 @@ const Home = ({ programId, mintAddress }) => {
                 {loading ? 'Loading...' : 'Refresh'}
               </button>
             </nav>
-            
             {renderTabContent()}
           </>
         )}
       </main>
-      
       <footer className="app-footer">
         <p>© 2025 FlashLend | Powered by Solana</p>
       </footer>

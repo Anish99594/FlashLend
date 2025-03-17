@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useWallet, useConnection } from '@solana/wallet-adapter-react';
 import { PublicKey, Transaction, TransactionInstruction } from '@solana/web3.js';
-import { getAssociatedTokenAddressSync } from '@solana/spl-token';
+import { getAssociatedTokenAddressSync, createAssociatedTokenAccountInstruction } from '@solana/spl-token';
 import { Buffer } from 'buffer';
+import { sha256 } from 'js-sha256';
 import '../styles/Components.css';
 
 // Ensure Buffer is available
@@ -32,27 +33,38 @@ const RequestLoan = ({ mintAddress, statePDA, poolVault, onSuccess }) => {
       setError('Please connect your wallet.');
       return;
     }
-    if (!amount || parseFloat(amount) <= 0) {
-      setError('Please enter a valid loan amount greater than 0.');
+    if (!amount || parseFloat(amount) < 10 || parseFloat(amount) > 100) {
+      setError('Loan amount must be between 10 and 100 tokens.');
       return;
     }
-
+  
     try {
       setLoading(true);
       setError(null);
       setSuccess(null);
-
+  
       const userTokenAccount = getAssociatedTokenAddressSync(new PublicKey(mintAddress), publicKey);
-
-      const discriminator = Buffer.from([120, 2, 7, 7, 1, 219, 235, 187]);
-      const amountBN = BigInt(Math.floor(amount * 1_000_000)); // Convert to lamports (6 decimals)
+      const accountInfo = await connection.getAccountInfo(userTokenAccount);
+      const transaction = new Transaction();
+  
+      if (!accountInfo) {
+        const createATAIx = createAssociatedTokenAccountInstruction(
+          publicKey,
+          userTokenAccount,
+          publicKey,
+          new PublicKey(mintAddress)
+        );
+        transaction.add(createATAIx);
+      }
+  
+      const discriminator = Buffer.from(sha256.digest('global:request_loan')).slice(0, 8);
+      const amountBN = BigInt(Math.floor(amount * 1_000_000));
       const durationBN = BigInt(duration);
       const data = Buffer.alloc(24);
-      data.writeUInt32LE(discriminator.readUInt32LE(0), 0);
-      data.writeUInt32LE(discriminator.readUInt32LE(4), 4);
+      discriminator.copy(data, 0);
       data.writeBigUInt64LE(amountBN, 8);
       data.writeBigUInt64LE(durationBN, 16);
-
+  
       const instruction = new TransactionInstruction({
         keys: [
           { pubkey: statePDA, isSigner: false, isWritable: true },
@@ -64,16 +76,19 @@ const RequestLoan = ({ mintAddress, statePDA, poolVault, onSuccess }) => {
         programId: PROGRAM_ID,
         data,
       });
-
-      const transaction = new Transaction().add(instruction);
+  
+      transaction.add(instruction);
       const signature = await sendTransaction(transaction, connection);
       await connection.confirmTransaction(signature, 'confirmed');
-      
+  
       setSuccess('Your loan request was successful! Funds have been transferred to your wallet.');
       setAmount('');
       onSuccess();
     } catch (err) {
       console.error('Loan request failed:', err);
+      if (err.logs) {
+        console.log('Transaction logs:', err.logs);
+      }
       setError(`Loan request failed: ${err.message}`);
     } finally {
       setLoading(false);
@@ -93,12 +108,18 @@ const RequestLoan = ({ mintAddress, statePDA, poolVault, onSuccess }) => {
           value={amount}
           onChange={(e) => {
             let value = e.target.value;
-            if (!/^\d*\.?\d*$/.test(value)) return; // Prevent negative and invalid input
+            if (!/^\d*\.?\d*$/.test(value)) return; // Prevent invalid input
+            if (value && (parseFloat(value) < 10 || parseFloat(value) > 100)) {
+              setError('Loan amount must be between 10 and 100 tokens.');
+            } else {
+              setError(null);
+            }
             setAmount(value);
           }}
-          placeholder="Enter amount"
+          placeholder="Enter amount (10 - 100)"
           className="input-field"
-          min="0.000001"
+          min="10"
+          max="100"
           step="0.000001"
           disabled={loading}
         />

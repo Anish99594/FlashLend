@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useConnection, useWallet } from '@solana/wallet-adapter-react';
 import { Transaction, TransactionInstruction, PublicKey } from '@solana/web3.js';
-import { TOKEN_PROGRAM_ID, getAssociatedTokenAddressSync } from '@solana/spl-token';
+import { TOKEN_PROGRAM_ID, getAssociatedTokenAddressSync, getAccount } from '@solana/spl-token';
 import { sha256 } from 'js-sha256';
 import { fetchStateData } from '../utils/fetchStateData';
 import '../styles/Components.css';
@@ -21,7 +21,7 @@ const RepayLoan = ({ mintAddress, statePDA, poolVault, onSuccess }) => {
         try {
           const data = await fetchStateData(connection);
           const loans = data.activeLoans.filter(loan => 
-            !loan.repaid && loan.borrower.toBase58() === publicKey.toBase58()
+            !loan.repaid && loan.borrower === publicKey.toBase58()
           );
           setActiveLoans(loans);
           
