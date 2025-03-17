@@ -207,7 +207,7 @@ const Home = ({ programId, mintAddress }) => {
         <div className="logo-container">
           <div className="logo">
             <span className="logo-icon">💸</span>
-            <h1>Flash Lending</h1>
+            <h1>FlashLend</h1>
           </div>
           <p className="tagline">Instant liquidity on Solana</p>
         </div>
@@ -225,7 +225,7 @@ const Home = ({ programId, mintAddress }) => {
         {!publicKey ? (
           <div className="connect-prompt">
             <div className="connect-card">
-              <h2>Welcome to Flash Lending</h2>
+              <h2>Welcome to FlashLend</h2>
               <p>Connect your wallet to start staking, borrowing, and earning.</p>
               <WalletMultiButton className="connect-button" />
             </div>
@@ -270,7 +270,7 @@ const Home = ({ programId, mintAddress }) => {
       </main>
       
       <footer className="app-footer">
-        <p>© 2025 Flash Lending | Powered by Solana</p>
+        <p>© 2025 FlashLend | Powered by Solana</p>
       </footer>
     </div>
   );
