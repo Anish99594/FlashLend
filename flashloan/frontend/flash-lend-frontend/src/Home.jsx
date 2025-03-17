@@ -9,6 +9,7 @@ import RequestLoan from './components/RequestLoan';
 import RepayLoan from './components/RepayLoan';
 import ResetPool from './components/ResetPool';
 import { fetchStateData } from './utils/fetchStateData';
+import logo from "../public/flashlendlogo1.png";
 import './styles/Home.css';
 
 const Home = ({ programId, mintAddress }) => {
@@ -206,9 +207,7 @@ const Home = ({ programId, mintAddress }) => {
       <header className="app-header">
         <div className="logo-container">
           <div className="logo">
-          <span className="logo-icon">
-  <img src="/flashlendlogo1.png" alt="FlashLend Logo" className="logo-img" />
-</span>
+            <span className="logo-icon">💸</span>
             <h1>FlashLend</h1>
           </div>
           <p className="tagline">Instant liquidity on Solana</p>
