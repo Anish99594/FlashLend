@@ -1,6 +1,6 @@
 # FlashLend
 
-![FlashLend Front Image](your-image-link-here)
+![FlashLend Front Image](flashloan/frontend/flash-lend-frontend/src/assets/dashboard.png)
 
 ## Introduction
 FlashLend is a decentralized lending protocol built on Solana using the Anchor framework. It enables users to stake tokens into a lending pool, request short-term flash loans, and earn fees based on loan repayments. The protocol ensures efficient lending and borrowing with a reputation-based fee system.
