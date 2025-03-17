@@ -210,7 +210,7 @@ const Home = ({ programId, mintAddress }) => {
             <span className="logo-icon">💸</span>
             <h1>FlashLend</h1>
           </div>
-          <p className="tagline">Instant liquidity on Solana</p>
+          <p className="tagline">Instant liquidity on Solana(Sonic)</p>
         </div>
         <div className="wallet-container">
           <WalletMultiButton className="wallet-button" />
