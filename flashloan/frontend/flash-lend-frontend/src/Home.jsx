@@ -206,7 +206,9 @@ const Home = ({ programId, mintAddress }) => {
       <header className="app-header">
         <div className="logo-container">
           <div className="logo">
-            <span className="logo-icon">💸</span>
+          <span className="logo-icon">
+  <img src="/flashlendlogo1.png" alt="FlashLend Logo" className="logo-img" />
+</span>
             <h1>FlashLend</h1>
           </div>
           <p className="tagline">Instant liquidity on Solana</p>
