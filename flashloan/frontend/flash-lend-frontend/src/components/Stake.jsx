@@ -18,8 +18,8 @@ const Stake = ({ mintAddress, statePDA, poolVault, onSuccess }) => {
       setError('Please connect your wallet.');
       return;
     }
-    if (!amount || amount <= 0) {
-      setError('Please enter a valid stake amount.');
+    if (!amount || parseFloat(amount) <= 0) {
+      setError('Please enter a valid stake amount greater than 0.');
       return;
     }
 
@@ -71,9 +71,15 @@ const Stake = ({ mintAddress, statePDA, poolVault, onSuccess }) => {
           id="stake-amount"
           type="number"
           value={amount}
-          onChange={(e) => setAmount(e.target.value)}
+          onChange={(e) => {
+            let value = e.target.value;
+            if (!/^\d*\.?\d*$/.test(value)) return; // Prevent negative and invalid input
+            setAmount(value);
+          }}
           placeholder="Enter amount"
           className="input-field"
+          min="0.000001"
+          step="0.000001"
           disabled={loading}
         />
       </div>

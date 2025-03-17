@@ -25,7 +25,6 @@ const RequestLoan = ({ mintAddress, statePDA, poolVault, onSuccess }) => {
     { value: '300', label: '5 minutes' },
     { value: '900', label: '15 minutes' },
     { value: '3600', label: '1 hour' },
-    { value: '86400', label: '1 day' }
   ];
 
   const requestLoan = async () => {
@@ -33,8 +32,8 @@ const RequestLoan = ({ mintAddress, statePDA, poolVault, onSuccess }) => {
       setError('Please connect your wallet.');
       return;
     }
-    if (!amount || !duration) {
-      setError('Please enter a valid amount and duration.');
+    if (!amount || parseFloat(amount) <= 0) {
+      setError('Please enter a valid loan amount greater than 0.');
       return;
     }
 
@@ -92,9 +91,15 @@ const RequestLoan = ({ mintAddress, statePDA, poolVault, onSuccess }) => {
           id="loan-amount"
           type="number"
           value={amount}
-          onChange={(e) => setAmount(e.target.value)}
+          onChange={(e) => {
+            let value = e.target.value;
+            if (!/^\d*\.?\d*$/.test(value)) return; // Prevent negative and invalid input
+            setAmount(value);
+          }}
           placeholder="Enter amount"
           className="input-field"
+          min="0.000001"
+          step="0.000001"
           disabled={loading}
         />
       </div>

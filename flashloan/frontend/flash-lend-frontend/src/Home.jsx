@@ -213,11 +213,11 @@ const Home = ({ programId, mintAddress }) => {
         </div>
         <div className="wallet-container">
           <WalletMultiButton className="wallet-button" />
-          {publicKey && (
+          {/* {publicKey && (
             <div className="wallet-address">
               {`${publicKey.toBase58().slice(0, 4)}...${publicKey.toBase58().slice(-4)}`}
             </div>
-          )}
+          )} */}
         </div>
       </header>
 
