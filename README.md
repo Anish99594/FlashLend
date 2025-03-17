@@ -121,6 +121,6 @@ For issues and support, open an issue on the [GitHub repository](https://github.
 
 ## Links
 - **GitHub Repository:** [FlashLend](https://github.com/Anish99594/FlashLend.git)
-- **Demo Video:** [Watch Here](https://your-demo-video-link.com)
+- **Demo Video:** [Watch Here](https://youtu.be/fnnH8zQoM2s)
 - **Project Website:** [Visit Here](https://flash-lend.vercel.app/)
 
